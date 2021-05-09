@@ -130,6 +130,10 @@ void *getInstructionAddressFromElf(const char *elf_file, const ASM_Instruction* 
         }
     }
     off_t off = progbits_section->sh_addr + instruc_offset;
+
+    if (elf_header != MAP_FAILED)
+        munmap(elf_header, size);
+
     return (void *) ((size_t) base_address + off - bias);
 
     error_exit:
