@@ -43,3 +43,4 @@ MIT License
 ### 致谢
 
 1. [Nougat_dlfunctions](https://github.com/avs333/Nougat_dlfunctions)
+2. [ndk_dlopen](https://github.com/Rprop/ndk_dlopen)
