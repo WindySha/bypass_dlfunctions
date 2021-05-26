@@ -43,14 +43,10 @@
 
 #ifdef __LP64__
 static const char *const kSystemLibDir = "/system/lib64/";
-static const char *const kOdmLibDir = "/odm/lib64/";
-static const char *const kVendorLibDir = "/vendor/lib64/";
 static const char *const kApexLibDir = "/apex/com.android.runtime/lib64/";
 static const char *const kApexArtNsLibDir = "/apex/com.android.art/lib64/";
 #else
 static const char *const kSystemLibDir = "/system/lib/";
-static const char *const kOdmLibDir = "/odm/lib/";
-static const char *const kVendorLibDir = "/vendor/lib/";
 static const char *const kApexLibDir = "/apex/com.android.runtime/lib/";
 static const char *const kApexArtNsLibDir = "/apex/com.android.art/lib/";
 #endif
@@ -99,36 +95,11 @@ static void *get_trampoline_address() {
     return trampoline_address_from_system_lib;
 }
 
-static inline void *bp_dlopen_with_fullpath(const char *filename, int flag) {
-    if (get_android_api_level() < ANDROID_N) {
-        return dlopen(filename, flag);
-    }
-    return dlfcn_trampoline(filename, (void *) flag, get_trampoline_address(), dlopen);
-}
-
 void *JNIEXPORT bp_dlopen(const char *filename, int flag) {
-    void *handle = NULL;
-    if (strlen(filename) > 0 && filename[0] == '/') {
-        handle = bp_dlopen_with_fullpath(filename, flag);
-    }
-    if (handle)
-        return handle;
-
-    const char *file_path_prefix[] =
-        {kApexArtNsLibDir, kApexLibDir, kSystemLibDir, kVendorLibDir, kOdmLibDir};
-    int size = 5;
-    char full_name[512] = {0};
-
-    for (int i = 0; i < size; i++) {
-        const char *prefix = file_path_prefix[i];
-        memset(full_name, 0, sizeof(full_name));
-        sprintf(full_name, "%s%s", prefix, filename);
-
-        handle = bp_dlopen_with_fullpath(full_name, flag);
-        if (handle)
-            return handle;
-    }
-    return NULL;
+    if (get_android_api_level() < ANDROID_N) {
+            return dlopen(filename, flag);
+        }
+    return dlfcn_trampoline(filename, (void *) flag, get_trampoline_address(), dlopen);
 }
 
 int JNIEXPORT bp_dlclose(void *handle) {
