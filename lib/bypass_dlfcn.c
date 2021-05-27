@@ -97,35 +97,27 @@ static void *get_trampoline_address() {
 
 void *JNIEXPORT bp_dlopen(const char *filename, int flag) {
     if (get_android_api_level() < ANDROID_N) {
-            return dlopen(filename, flag);
-        }
+        return dlopen(filename, flag);
+    }
     return dlfcn_trampoline(filename, (void *) flag, get_trampoline_address(), dlopen);
 }
 
 int JNIEXPORT bp_dlclose(void *handle) {
-    if (get_android_api_level() < ANDROID_N) {
-        return dlclose(handle);
-    }
-    return (int) dlfcn_trampoline(handle, NULL, get_trampoline_address(), dlclose);
+    return dlclose(handle);
 }
 
-const char *JNIEXPORT bp_dlerror(void) {
-    if (get_android_api_level() < ANDROID_N) {
-        return dlerror();
-    }
-    return dlfcn_trampoline(NULL, NULL, get_trampoline_address(), dlerror);
+const char *JNIEXPORT bp_dlerror() {
+    return dlerror();
 }
 
 void *JNIEXPORT bp_dlsym(void *handle, const char *symbol) {
-    if (get_android_api_level() < ANDROID_N) {
-        return dlsym(handle, symbol);
-    }
-    return dlfcn_trampoline(handle, symbol, get_trampoline_address(), dlsym);
+    return dlsym(handle, symbol);
+//    if (get_android_api_level() < ANDROID_N) {
+//        return dlsym(handle, symbol);
+//    }
+//    return dlfcn_trampoline(handle, symbol, get_trampoline_address(), dlsym);
 }
 
 int JNIEXPORT bp_dladdr(const void *ddr, Dl_info *info) {
-    if (get_android_api_level() < ANDROID_N) {
-        return dladdr(ddr, info);
-    }
-    return (int) dlfcn_trampoline(ddr, info, get_trampoline_address(), dladdr);
+    return dladdr(ddr, info);
 }
