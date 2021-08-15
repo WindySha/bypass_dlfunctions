@@ -40,6 +40,9 @@ int bp_dladdr(const void *ddr, Dl_info *info);
 ### License
 MIT License
 
+### 实现原理
+[另一种绕过Android系统库访问限制的方法](https://windysha.github.io/2021/05/26/%E5%8F%A6%E4%B8%80%E7%A7%8D%E7%BB%95%E8%BF%87Android%E7%B3%BB%E7%BB%9F%E5%BA%93%E8%AE%BF%E9%97%AE%E9%99%90%E5%88%B6%E7%9A%84%E6%96%B9%E6%B3%95/)
+
 ### 致谢
 
 1. [Nougat_dlfunctions](https://github.com/avs333/Nougat_dlfunctions)
